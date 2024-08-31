@@ -1,9 +1,8 @@
-﻿using Application.Features.Queries;
+﻿using Application.Features.Commands;
+using Application.Features.Queries;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebAPI.Controllers
 {
@@ -17,9 +16,17 @@ namespace WebAPI.Controllers
         public TodosController(IMediator mediator)
         {
             _mediator = mediator;
-        }            
+        }
 
-        
+        [HttpPost("create/todo")]
+        public async Task<Todo> CreateTodo(Todo todo)
+        {
+            var model = new CreateTodoCommand(todo);
+
+            return await _mediator.Send(model);
+        }
+
+
         [HttpGet("get/todos/{ownerId}")]
         public async Task<List<Todo>> GetTodos(string ownerId)
         {

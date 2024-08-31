@@ -28,9 +28,10 @@ namespace Infrastructure.Repositories
             });         
         }
 
-        public Task CreateTodoAsync(Todo model)
+        public async Task CreateTodoAsync(Todo model)
         {
-            throw new NotImplementedException();
+            model.Id = Guid.NewGuid().ToString();
+            todo.Add(model);            
         }
 
         public Task DeleteTodoAsync(Todo model)
@@ -44,7 +45,7 @@ namespace Infrastructure.Repositories
         }
       
         public List<Todo> GetTodosAsync(string ownerId)
-        {
+        {            
             return todo.Where(i => i.OwnerId == ownerId).ToList();
         }
     }
