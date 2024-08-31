@@ -1,5 +1,5 @@
-﻿using Domain.Models;
-using Infrastructure.Features.Queries;
+﻿using Application.Features.Queries;
+using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,22 +17,14 @@ namespace WebAPI.Controllers
         public TodosController(IMediator mediator)
         {
             _mediator = mediator;
-        }
+        }            
 
-
-        // GET: api/<TodosController>
-        [HttpGet]        
-        public async Task<List<Todo>> Get()
+        
+        [HttpGet("get/todos/{ownerId}")]
+        public async Task<List<Todo>> GetTodos(string ownerId)
         {
-            return await _mediator.Send(new GetAllTodosQuery());
+            return await _mediator.Send(new GetTodosQuery(ownerId));
         }
 
-        // GET api/<TodosController>/5
-        [HttpGet("{id}")]
-        public async Task<Todo> GetTodo(string id)
-        {
-            return await _mediator.Send(new GetTodosQuery(id));
-        }
-      
     }
 }

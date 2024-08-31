@@ -25,7 +25,7 @@ namespace Infrastructure.Repositories
                 OwnerId = "1" ,
                 DueDate = DateTime.Now ,
                 TodoCollectionId = "1"
-            });            
+            });         
         }
 
         public Task CreateTodoAsync(Todo model)
@@ -43,9 +43,9 @@ namespace Infrastructure.Repositories
             throw new NotImplementedException();
         }
       
-        public List<Todo> GetAllTodosAsync()
+        public List<Todo> GetTodosAsync(string ownerId)
         {
-            return todo;
+            return todo.Where(i => i.OwnerId == ownerId).ToList();
         }
     }
 }

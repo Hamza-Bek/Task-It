@@ -13,6 +13,6 @@ namespace Application.Interfaces
         Task EditTodoAsync(Todo model);
         Task DeleteTodoAsync(Todo model);
                 
-        List<Todo> GetAllTodosAsync(); // Get user's todos
+        List<Todo> GetTodosAsync(string ownerId); // Get user's todos
     }
 }
