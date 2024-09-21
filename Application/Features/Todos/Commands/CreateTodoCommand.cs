@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Queries
+namespace Application.Features.Todos.Commands
 {
-    public record GetTodosQuery(string ownerId) : IRequest<List<Todo>>;
+    public record CreateTodoCommand(string CollectionId, Todo Todo) : IRequest<Todo>;
+
 }
