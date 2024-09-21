@@ -1,4 +1,4 @@
-﻿using Application.Features.Queries;
+﻿using Application.Features.Todos.Queries;
 using Application.Interfaces;
 using Domain.Models;
 using MediatR;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Handlers
+namespace Application.Features.Todos.Queries
 {
     public class GetTodosHandler : IRequestHandler<GetTodosQuery, List<Todo>>
     {
@@ -20,7 +20,7 @@ namespace Application.Features.Handlers
 
         public Task<List<Todo>> Handle(GetTodosQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_data.GetTodosAsync(request.ownerId));
+            return Task.FromResult(_data.GetTodosAsync(request.OwnerId));
         }
     }
 }

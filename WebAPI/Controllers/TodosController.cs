@@ -1,5 +1,5 @@
-﻿using Application.Features.Commands;
-using Application.Features.Queries;
+﻿using Application.Features.Todos.Commands;
+using Application.Features.Todos.Queries;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

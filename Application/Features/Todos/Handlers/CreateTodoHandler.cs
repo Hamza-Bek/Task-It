@@ -1,9 +1,8 @@
-﻿using Application.Features.Commands;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Domain.Models;
 using MediatR;
 
-namespace Application.Features.Handlers
+namespace Application.Features.Todos.Commands
 {
     public class CreateTodoHandler : IRequestHandler<CreateTodoCommand, Todo>
     {
