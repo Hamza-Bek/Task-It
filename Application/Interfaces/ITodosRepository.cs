@@ -10,9 +10,9 @@ namespace Application.Interfaces
     public interface ITodosRepository
     {
         Task CreateTodoAsync(Todo model);
-        Task EditTodoAsync(Todo model);
-        Task DeleteTodoAsync(Todo model);
-                
-        List<Todo> GetTodosAsync(string ownerId); // Get user's todos
+        Task EditTodoAsync(string id, Todo model);
+        Task DeleteTodoAsync(string id);
+
+        List<Todo> GetTodosAsync(string collectionId); // Get user's todos
     }
 }

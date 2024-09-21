@@ -11,42 +11,29 @@ namespace Infrastructure.Repositories
 {
     public class TodosRepository : ITodosRepository
     {
-
-        private List<Todo> todo = new();
-
         public TodosRepository()
         {
-            todo.Add(new Todo { 
-                Id = "1" ,
-                Title ="Task #1" ,
-                CreatedAt = DateTime.Now ,
-                IsDone = false ,
-                Priority = Priority.High ,
-                OwnerId = "1" ,
-                DueDate = DateTime.Now ,
-                TodoCollectionId = "1"
-            });         
+
         }
 
-        public async Task CreateTodoAsync(Todo model)
-        {
-            model.Id = Guid.NewGuid().ToString();
-            todo.Add(model);            
-        }
-
-        public Task DeleteTodoAsync(Todo model)
+        public Task CreateTodoAsync(Todo model)
         {
             throw new NotImplementedException();
         }
 
-        public Task EditTodoAsync(Todo model)
+        public Task DeleteTodoAsync(string toodId)
         {
             throw new NotImplementedException();
         }
-      
-        public List<Todo> GetTodosAsync(string ownerId)
-        {            
-            return todo.Where(i => i.OwnerId == ownerId).ToList();
+
+        public Task EditTodoAsync(string todoId, Todo model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Todo> GetTodosAsync(string collectionId)
+        {
+            return Enumerable.Empty<Todo>().ToList();
         }
     }
 }

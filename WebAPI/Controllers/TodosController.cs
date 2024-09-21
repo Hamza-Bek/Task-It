@@ -18,10 +18,10 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("create/todo")]
-        public async Task<Todo> CreateTodo(Todo todo)
+        [HttpPost("create/todo/{collectionId}")]
+        public async Task<Todo> CreateTodo(string collectionId, Todo todo)
         {
-            var model = new CreateTodoCommand(todo);
+            var model = new CreateTodoCommand(collectionId, todo);
 
             return await _mediator.Send(model);
         }

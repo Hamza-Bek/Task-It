@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Commands
 {
-    public record CreateTodoCommand(Todo Todo) : IRequest<Todo>;
-    
+    public record CreateTodoCommand(string CollectionId, Todo Todo) : IRequest<Todo>;
+
 }
