@@ -6,14 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.Data;
+using MongoDB.Driver;
 
 namespace Infrastructure.Repositories
 {
     public class TodosRepository : ITodosRepository
     {
-        public TodosRepository()
-        {
+        private const string CollectionName = "todos-collection";
+        private readonly IMongoCollection<Todo> _todosCollection;
 
+        public TodosRepository(MongoDbContext dbContext)
+        {
+            _todosCollection = dbContext.GetCollection<Todo>(CollectionName);
         }
 
         public Task CreateTodoAsync(Todo model)
