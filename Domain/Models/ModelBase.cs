@@ -6,7 +6,9 @@ namespace Domain.Models;
 
 public class ModelBase
 {
-    public ObjectId Id { get; set; }
+    [BsonId]
+    [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+    public string? Id { get; set; }
 
     public string OwnerId { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
