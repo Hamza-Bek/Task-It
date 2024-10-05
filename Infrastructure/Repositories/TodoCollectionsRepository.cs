@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Exceptions;
 using Domain.Models;
 using Infrastructure.Data;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Infrastructure.Repositories;
@@ -48,11 +49,22 @@ public class TodoCollectionsRepository : ITodoCollectionsRepostiory
 
     public async Task<bool> DeleteCollectionAsync(string id)
     {
-        throw new NotImplementedException();
+        var filter = Builders<TodoCollection>.Filter.Eq(x => x.Id, id);
+
+        var result = await _collection.DeleteOneAsync(filter);
+
+        if (result.DeletedCount > 0)
+        {
+            return true;
+        }
+        else
+        {
+            throw new OperationFailedException("Something went wrong. Please try again.");
+        }
     }
 
     public async Task<IEnumerable<TodoCollection>> GetCollectionsAsync()
     {
-        throw new NotImplementedException();
+        
     }
 }
