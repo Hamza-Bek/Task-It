@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\TodoCollections\Handlers\" />
     <Folder Include="Features\Todos\" />
   </ItemGroup>
 
