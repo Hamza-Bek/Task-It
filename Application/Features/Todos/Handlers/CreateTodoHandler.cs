@@ -14,7 +14,7 @@ namespace Application.Features.Todos.Commands
         }
         public async Task<Todo> Handle(CreateTodoCommand request, CancellationToken cancellationToken)
         {
-            await _data.CreateTodoAsync(request.Todo);
+            await _data.CreateTodoAsync(request.CollectionId , request.Todo);
             return request.Todo;
         }
     }
