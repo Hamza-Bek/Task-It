@@ -33,7 +33,7 @@ public class TodoCollectionsController : ControllerBase
     {
         return Ok();
     }
-
+    
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCollection(string id, CancellationToken cancellationToken)
     {

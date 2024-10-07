@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dtos.Todo;
 
 namespace Application.Features.Todos.Handlers
 {
@@ -20,8 +21,8 @@ namespace Application.Features.Todos.Handlers
 
         public async Task<Todo> Handle(EditTodoCommand request, CancellationToken cancellationToken)
         {
-            await _data.EditTodoAsync(request.TodoId, request.Todo);
-            return request.Todo;
+            var updatedTodo = await _data.EditTodoAsync(request.TodoId, request.Todo);
+            return updatedTodo;
         }
     }
 }

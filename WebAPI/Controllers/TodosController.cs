@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.Dtos.Todo;
 using Application.Features.Todos.Commands;
 using Application.Features.Todos.Queries;
 using Domain.Models;
@@ -20,7 +21,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("create/todo/{collectionId}")]
-        public async Task<Todo> CreateTodo(string collectionId, Todo todo)
+        public async Task<Todo> CreateTodo(string collectionId, SubmitTodoRequest todo)
         {
             var model = new CreateTodoCommand(collectionId, todo);
 
@@ -28,7 +29,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("edit/todo/{todoId}")]
-        public async Task<Todo> EditTodo(string todoId , Todo todo)
+        public async Task<Todo> EditTodo(string todoId , SubmitTodoRequest todo)
         {
             var model = new EditTodoCommand(todoId, todo);
 

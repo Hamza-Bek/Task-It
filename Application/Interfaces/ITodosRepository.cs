@@ -5,14 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dtos.Todo;
 
 namespace Application.Interfaces
 {
     public interface ITodosRepository
     {
-        Task CreateTodoAsync(string collectionId ,Todo model);
-        Task EditTodoAsync(string todoId, Todo model);
+        Task<Todo> CreateTodoAsync(string collectionId, SubmitTodoRequest model);
+        Task<Todo> EditTodoAsync(string todoId, SubmitTodoRequest model);
         Task DeleteTodoAsync(string todoId);
-        Task<PageList<Todo>> GetTodosAsync(PageRequest pageRequest , string collectionId); // Get user's todos       
+
+        Task<Todo> GetTodoByIdAsync(string ownerId, string todoId);
+        Task<PageList<Todo>> GetTodosAsync(PageRequest pageRequest , string collectionId); // Get user's todos
     }
 }
