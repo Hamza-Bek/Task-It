@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Data;
 using MongoDB.Driver;
+using Application.Common;
+using MongoDB.Bson;
 
 namespace Infrastructure.Repositories
 {
@@ -21,24 +23,62 @@ namespace Infrastructure.Repositories
             _todosCollection = dbContext.GetCollection<Todo>(CollectionName);
         }
 
-        public Task CreateTodoAsync(Todo model)
+        public async Task CreateTodoAsync(string collectionId , Todo model)
         {
-            throw new NotImplementedException();
+            if (model is null)             
+                throw new ArgumentNullException(nameof(model), "Can not insert null values.");
+            
+
+            model.TodoCollectionId = collectionId;
+            await _todosCollection.InsertOneAsync(model);
         }
 
-        public Task DeleteTodoAsync(string toodId)
+        public async Task DeleteTodoAsync(string todoId)
         {
-            throw new NotImplementedException();
-        }
+          if(string.IsNullOrEmpty(todoId))            
+                throw new ArgumentNullException(nameof(todoId), "Todo ID cannot be null");
+            
 
-        public Task EditTodoAsync(string todoId, Todo model)
-        {
-            throw new NotImplementedException();
-        }
+            var filter = Builders<Todo>.Filter.Eq(t => t.Id, todoId);
 
-        public List<Todo> GetTodosAsync(string collectionId)
+            await _todosCollection.DeleteOneAsync(filter);
+
+        }   
+
+        public async Task EditTodoAsync(string id, Todo model)
         {
-            return Enumerable.Empty<Todo>().ToList();
+            var filter = Builders<Todo>.Filter.Eq(t => t.Id, id);
+
+            var result = await _todosCollection.ReplaceOneAsync(filter, model);
+
+            if (result.MatchedCount == 0)
+            {
+                throw new KeyNotFoundException($"Todo with ID {id} was not found.");
+            }
+        }    
+
+        public async Task<PageList<Todo>> GetTodosAsync(PageRequest pageRequest, string collectionId)
+        {
+           
+            var filter = Builders<Todo>.Filter.Eq(f => f.TodoCollectionId, collectionId);
+      
+            var skip = (pageRequest.PageNumber - 1) * pageRequest.PageSize;
+
+            if (pageRequest.SearchQuery is not null)
+            {
+                var searchFilter = Builders<Todo>.Filter.Regex(t => t.Title, new BsonRegularExpression(pageRequest.SearchQuery, "i"));
+                filter = Builders<Todo>.Filter.And(filter, searchFilter);
+            }
+
+            var totalCount = (int)await _todosCollection.CountDocumentsAsync(filter);
+          
+            var todos = await _todosCollection
+                .Find(filter)
+                .Skip(skip)
+                .Limit(pageRequest.PageSize)
+                .ToListAsync();
+          
+            return new PageList<Todo>(todos, totalCount, pageRequest.PageNumber, pageRequest.PageSize);
         }
     }
 }

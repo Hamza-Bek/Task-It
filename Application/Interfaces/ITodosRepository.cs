@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.Common;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,9 @@ namespace Application.Interfaces
 {
     public interface ITodosRepository
     {
-        Task CreateTodoAsync(Todo model);
-        Task EditTodoAsync(string id, Todo model);
-        Task DeleteTodoAsync(string id);
-
-        List<Todo> GetTodosAsync(string collectionId); // Get user's todos
+        Task CreateTodoAsync(string collectionId ,Todo model);
+        Task EditTodoAsync(string todoId, Todo model);
+        Task DeleteTodoAsync(string todoId);
+        Task<PageList<Todo>> GetTodosAsync(PageRequest pageRequest , string collectionId); // Get user's todos       
     }
 }

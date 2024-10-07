@@ -1,4 +1,5 @@
-﻿using Application.Features.Todos.Queries;
+﻿using Application.Common;
+using Application.Features.Todos.Queries;
 using Application.Interfaces;
 using Domain.Models;
 using MediatR;
@@ -18,9 +19,10 @@ namespace Application.Features.Todos.Queries
             _data = data;
         }
 
-        public Task<List<Todo>> Handle(GetTodosQuery request, CancellationToken cancellationToken)
+        public async Task<List<Todo>> Handle(GetTodosQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_data.GetTodosAsync(request.OwnerId));
+            var todosPageList = await _data.GetTodosAsync(request.PageRequest, request.CollectionId);           
+            return todosPageList.Items.ToList();
         }
     }
 }
