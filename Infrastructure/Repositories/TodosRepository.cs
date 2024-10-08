@@ -1,16 +1,9 @@
 ﻿using Application.Interfaces;
-using Domain.Enums;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Infrastructure.Data;
 using MongoDB.Driver;
 using Application.Common;
 using Application.Dtos.Todo;
-using Domain.Exceptions;
 using MongoDB.Bson;
 
 namespace Infrastructure.Repositories
@@ -26,16 +19,27 @@ namespace Infrastructure.Repositories
             _todosCollection = dbContext.GetCollection<Todo>(CollectionName);
         }
 
-        public async Task<Todo> CreateTodoAsync(string collectionId, Todo model)
+        public async Task<Todo> CreateTodoAsync(string collectionId, SubmitTodoRequest model)
         {
             if (model is null)
                 throw new ArgumentNullException(nameof(model), "Can not insert null values.");
-
-
-            model.TodoCollectionId = collectionId;
-            await _todosCollection.InsertOneAsync(model);
-
-            return model;
+            
+            var todo = new Todo
+            {
+                Id = Guid.NewGuid().ToString(), 
+                Title = model.Title,
+                Content = model.Content,
+                Priority = model.Priority,
+                DueDate = model.DueDate,
+                IsDone = model.IsDone,
+                CreatedAt = DateTime.UtcNow,
+                LastUpdatedAt = DateTime.UtcNow,
+                TodoCollectionId = collectionId
+            };
+            
+            await _todosCollection.InsertOneAsync(todo);
+            
+            return todo;
         }
 
         public async Task DeleteTodoAsync(string todoId)
@@ -84,17 +88,12 @@ namespace Infrastructure.Repositories
                 .Set(x=> x.IsDone, model.IsDone)
                 .Set(x=> x.LastUpdatedAt, DateTime.UtcNow);
 
+            var updatedTodo = await _todosCollection.FindOneAndUpdateAsync(filter, update ,new FindOneAndUpdateOptions<Todo>
+            {
+                ReturnDocument = ReturnDocument.After
+            });
 
-            if (result.ModifiedCount > 0)
-            {
-                // Fetch the updated document and return it
-                return await _todosCollection.Find(filter).FirstOrDefaultAsync();
-            }
-            else
-            {
-                // Return null or handle the case where no document was updated
-                throw new OperationFailedException("Something went wrong. Please try again.");
-            }
+            return updatedTodo;
         }
 
         public async Task<PageList<Todo>> GetTodosAsync(PageRequest pageRequest, string collectionId)

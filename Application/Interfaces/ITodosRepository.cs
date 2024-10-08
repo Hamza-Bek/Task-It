@@ -11,7 +11,7 @@ namespace Application.Interfaces
 {
     public interface ITodosRepository
     {
-        Task<Todo> CreateTodoAsync(string collectionId, Todo model);
+        Task<Todo> CreateTodoAsync(string collectionId, SubmitTodoRequest model);
         Task<Todo> EditTodoAsync(string todoId, SubmitTodoRequest model);
         Task DeleteTodoAsync(string todoId);
 
