@@ -18,10 +18,10 @@ public class EditCollectionCommandHandler : IRequestHandler<EditCollectionComman
     {
         var updatedTodo = new TodoCollection()
         {
-            Name = request.Collection.Name,
-            Color = request.Collection.Color,
-            Description = request.Collection.Description,
-            CoverImageUrl = request.Collection.CoverImageUrl
+            Name = request.Model.Name,
+            Color = request.Model.Color,
+            Description = request.Model.Description,
+            CoverImageUrl = request.Model.CoverImageUrl
         };
 
         return await _collectionsRepository.EditCollectionAsync(request.CollectionId, updatedTodo, cancellationToken);
