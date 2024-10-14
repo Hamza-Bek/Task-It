@@ -1,4 +1,6 @@
-﻿using Domain.Models;
+﻿using Amazon.Runtime.Internal;
+using Application.Common;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,5 +10,5 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Todos.Queries
 {
-    public record GetTodosQuery(string OwnerId) : IRequest<List<Todo>>;
+    public record GetTodosQuery(PageRequest PageRequest, string CollectionId) : IRequest<List<Todo>>;
 }

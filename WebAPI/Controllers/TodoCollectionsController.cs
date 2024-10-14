@@ -56,7 +56,7 @@ public class TodoCollectionsController : ControllerBase
             IsSuccess = true
         });
     }
-
+    
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCollection(string id, CancellationToken cancellationToken)
     {
