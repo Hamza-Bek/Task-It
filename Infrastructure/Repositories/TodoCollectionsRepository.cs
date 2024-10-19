@@ -22,6 +22,7 @@ public class TodoCollectionsRepository : ITodoCollectionsRepository
 
     public async Task<TodoCollection> CreateCollectionAsync(TodoCollection collection, CancellationToken cancellationToken = default)
     {
+        collection.Id = ObjectId.GenerateNewId().ToString();
         await _collection.InsertOneAsync(collection, cancellationToken: cancellationToken);
         return collection;
     }

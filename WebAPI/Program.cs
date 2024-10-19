@@ -1,12 +1,14 @@
 using Application.Common;
 using Application.Features.Todos.Queries;
 using Application.Interfaces;
+using Application.Pipelines;
 using Application.Validators.TodoCollectionCommands;
 using FluentValidation;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Kinde;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebAPI;
+using WebAPI.Middleware;
 using WebAPI.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +71,7 @@ builder.Services.AddScoped<ITodosRepository, TodosRepository>();
 builder.Services.AddScoped<ITodoCollectionsRepository, TodoCollectionsRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateCollectionCommandValidator>();
+ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped(sp =>
@@ -78,7 +82,7 @@ builder.Services.AddScoped(sp =>
     if (httpContextAccessor is not null)
     {
 		var httpContext = httpContextAccessor.HttpContext;
-		if (httpContext is not null)
+		if (httpContext is not null && httpContext.User.Identity is not null && httpContext.User.Identity.IsAuthenticated)
         {
             identity.Id = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         }
@@ -87,7 +91,12 @@ builder.Services.AddScoped(sp =>
     return identity;
 });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetTodosHandler).Assembly));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(GetTodosHandler).Assembly);
+});
+
 
 builder.Services.AddHttpClient("SupabaseClient", client =>
 {
@@ -113,6 +122,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllers();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();

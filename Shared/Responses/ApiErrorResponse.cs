@@ -6,3 +6,8 @@ public class ApiErrorResponse
 
     public List<string>? Errors { get; set; }
 }
+
+public class ValidationErrorResponse : ApiErrorResponse
+{
+    public Dictionary<string, string> ValidationErrors { get; set; } = [];
+}

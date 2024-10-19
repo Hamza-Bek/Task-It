@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
             
             var todo = new Todo
             {
-                Id = Guid.NewGuid().ToString(), 
+                Id = ObjectId.GenerateNewId().ToString(), 
                 Title = model.Title,
                 Content = model.Content,
                 Priority = model.Priority,
